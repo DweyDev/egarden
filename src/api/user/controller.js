@@ -1,5 +1,7 @@
 import { success, notFound } from '../../services/response/'
 import { User } from '.'
+import { sign } from '../../services/jwt'
+import { ERROR_MESSAGES } from '../../constants'
 
 export const index = ({ querymen: { query, select, cursor } }, res, next) =>
   User.find(query, select, cursor)
@@ -17,22 +19,38 @@ export const show = ({ params }, res, next) =>
 export const showMe = ({ user }, res) =>
   res.json(user.view(true))
 
-export const create = ({ bodymen: { body } }, res, next) =>
-  User.create(body)
-    .then((user) => user.view(true))
-    .then(success(res, 201))
-    .catch((err) => {
-      /* istanbul ignore else */
-      if (err.name === 'MongoError' && err.code === 11000) {
-        res.status(409).json({
-          valid: false,
-          param: 'email',
-          message: 'email already registered'
-        })
-      } else {
-        next(err)
-      }
+export const create = async ({ bodymen: { body } }, res, next) => {
+  try {
+    let user
+    const exists = await User.findOne({
+      email: body.email
     })
+
+    if (!exists) {
+      user = await User.create({
+        email: body.email,
+        password: body.password,
+        name: body.name,
+        role: body.role
+      }).then((user) => {
+        return User.findById(user.id).then((foundUser) => {
+          sign(foundUser.id)
+          .then((token) => ({ token, user: foundUser.view(true) }))
+          .then(success(res, 201))
+          .catch(next)
+        })
+      })
+    } else {
+      res.status(403).json({
+        valid: false,
+        message: ERROR_MESSAGES.USED_EMAIL
+      })
+      return null
+    }
+  } catch (error) {
+    next(error)
+  }
+}
 
 export const update = ({ bodymen: { body }, params, user }, res, next) =>
   User.findById(params.id === 'me' ? user.id : params.id)
