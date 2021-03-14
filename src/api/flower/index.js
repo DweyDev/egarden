@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
 import { token } from '../../services/passport'
-import { create, index, show, update, destroy } from './controller'
+import { create, index, show, update, destroy, getRecomended } from './controller'
 import { schema } from './model'
 export Flower, { schema } from './model'
 
@@ -44,6 +44,22 @@ router.get('/',
   token({ required: true, roles: ['admin'] }),
   query(),
   index)
+
+/**
+ * @api {get} /flowers/recomended?colour=&price= Retrieve recomended flowers
+ * @apiName RetrieveRecomendedFlowersFlowers
+ * @apiGroup Flower
+ * @apiPermission admin
+ * @apiParam {String} access_token admin access token.
+ * @apiUse listParams
+ * @apiSuccess {Object[]} flowers List of flowers.
+ * @apiError {Object} 400 Some parameters may contain invalid values.
+ * @apiError 401 admin/user access only.
+ */
+router.get('/recomended',
+  token({ required: true, roles: ['user', 'admin'] }),
+  query(),
+  getRecomended)
 
 /**
  * @api {get} /flowers/:id Retrieve flower

@@ -1,5 +1,6 @@
 import { success, notFound } from '../../services/response/'
 import { Flower } from '.'
+import { ERROR_MESSAGES } from '../../constants'
 
 export const create = ({ bodymen: { body } }, res, next) =>
   Flower.create(body)
@@ -34,3 +35,29 @@ export const destroy = ({ params }, res, next) =>
     .then((flower) => flower ? flower.remove() : null)
     .then(success(res, 204))
     .catch(next)
+
+
+export const getRecomended = async (req, res, next) => {
+  try {
+    let colour = req.query.colour
+    let maxPrice = req.query.price
+    Flower.find({$or:[{colour},{price: {$lte: maxPrice}}]})
+      .then(flowers => {
+        if (!flowers) {
+          res.status(404).json({
+            valid: false,
+            message: ERROR_MESSAGES.NOTHING_WAS_FOUND
+          })
+          return null
+        } else {
+          res.status(200).json({
+            valid: true,
+            flowers
+          })
+          return null
+        }
+      })
+  } catch (error) {
+    next(error)
+  }
+}
