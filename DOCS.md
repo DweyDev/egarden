@@ -125,7 +125,9 @@
 
 | Name    | Type      | Description                          |
 |---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>admin access token.</p>							|
+| access_token			| String			|  <p>admin access token. - DISABLED</p>							|
+| colour			| String			|  <p>flower colour</p>							|
+| price			| Number			|  <p>maximum price</p>							|
 | q			| String			| **optional** <p>Query to search.</p>							|
 | page			| Number			| **optional** <p>Page number.</p>							|
 | limit			| Number			| **optional** <p>Amount of returned items.</p>							|
@@ -203,7 +205,7 @@
 
 | Name    | Type      | Description                          |
 |---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>user access token.</p>							|
+| access_token			| String			|  <p>user access token. - DISABLED</p>							|
 | q			| String			| **optional** <p>Query to search.</p>							|
 | page			| Number			| **optional** <p>Page number.</p>							|
 | limit			| Number			| **optional** <p>Amount of returned items.</p>							|

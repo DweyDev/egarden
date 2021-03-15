@@ -51,6 +51,8 @@ router.get('/',
  * @apiGroup Flower
  * @apiPermission admin
  * @apiParam {String} access_token admin access token. - DISABLED
+ * @apiParam {String} colour flower colour
+ * @apiParam {Number} price maximum price
  * @apiUse listParams
  * @apiSuccess {Object[]} flowers List of flowers.
  * @apiError {Object} 400 Some parameters may contain invalid values.
