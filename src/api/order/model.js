@@ -8,10 +8,12 @@ const orderSchema = new Schema({
   },
   products: [{
     type: Schema.Types.ObjectId,
-    ref: 'Flower'
+    ref: 'Flower',
+    required: true
   }],
   quantities: [{
-    type: Number
+    type: Number,
+    required: true
   }]
 }, {
   timestamps: true,

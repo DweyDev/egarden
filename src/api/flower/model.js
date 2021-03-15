@@ -2,16 +2,20 @@ import mongoose, { Schema } from 'mongoose'
 
 const flowerSchema = new Schema({
   name: {
-    type: String
+    type: String,
+    required: true
   },
   colour: {
-    type: String
+    type: String,
+    required: true
   },
   price: {
-    type: Number
+    type: Number,
+    required: true
   },
   country: {
-    type: String
+    type: String,
+    required: true
   }
 }, {
   timestamps: true,

@@ -51,7 +51,6 @@ export const getRecomended = async (req, res, next) => {
           return null
         } else {
           res.status(200).json({
-            valid: true,
             flowers
           })
           return null

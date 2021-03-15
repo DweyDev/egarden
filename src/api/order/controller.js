@@ -1,6 +1,7 @@
 import { success, notFound, authorOrAdmin } from '../../services/response/'
 import { Order } from '.'
 import { Flower } from '../flower'
+import { ERROR_MESSAGES } from '../../constants'
 
 export const create = ({ user, bodymen: { body } }, res, next) =>
   Order.create({ ...body, user })
@@ -8,13 +9,28 @@ export const create = ({ user, bodymen: { body } }, res, next) =>
     .then(success(res, 201))
     .catch(next)
 
-export const index = ({ querymen: { query, select, cursor } }, res, next) =>
-  Order.find(query, select, cursor)
-    .populate('user')
-    .populate([{path: 'products', model: Flower}])
-    .then((orders) => orders.map((order) => order.view()))
-    .then(success(res))
-    .catch(next)
+export const index = ({ querymen: { query, select, cursor } }, res, next) => {
+  try {
+    Order.find(query, select, cursor)
+      .populate('user')
+      .populate([{path: 'products', model: Flower}])
+      .then(orders => {
+        if (!orders) {
+          res.status(404).json({
+            message: ERROR_MESSAGES.NOTHING_WAS_FOUND
+          })
+          return null
+        } else {
+          res.status(200).json({
+            orders
+          })
+          return null
+        }
+      })
+  } catch (error) {
+    next(error)
+  }
+}
 
 export const show = ({ params }, res, next) =>
   Order.findById(params.id)

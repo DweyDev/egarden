@@ -32,14 +32,14 @@ router.post('/',
  * @apiName RetrieveOrders
  * @apiGroup Order
  * @apiPermission user
- * @apiParam {String} access_token user access token.
+ * @apiParam {String} access_token user access token. - DISABLED
  * @apiUse listParams
  * @apiSuccess {Object[]} orders List of orders.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 401 user access only.
  */
 router.get('/',
-  token({ required: true }),
+  token({ required: false }),
   query(),
   index)
 
