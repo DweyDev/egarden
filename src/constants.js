@@ -6,8 +6,6 @@ export const ERROR_MESSAGES = {
   NOT_ACTIVE: 'not_active',
   NOT_FOUND: 'not_found',
   INVALID_ID: 'invalid_id',
-  INVALID_PROVIDER: 'provider_invalid_id',
-  INVALID_BENEFICIARY: 'beneficiary_invalid_id',
   UNAUTHORIZED: 'unauthorized',
   UNPROCESSABLE_ENTITY: 'unprocessable_entity',
   EMPTY_FIELD: 'empty_field',
