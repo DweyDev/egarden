@@ -1,6 +1,8 @@
 import { Router } from 'express'
 import user from './user'
 import auth from './auth'
+import flower from './flower'
+import order from './order'
 
 const router = new Router()
 
@@ -29,5 +31,7 @@ const router = new Router()
  */
 router.use('/users', user)
 router.use('/auth', auth)
+router.use('/flowers', flower)
+router.use('/orders', order)
 
 export default router

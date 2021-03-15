@@ -17,6 +17,7 @@ export default (apiRoot, routes) => {
     app.use(morgan('dev'))
   }
 
+  app.use(express.static('public'))
   app.use(bodyParser.urlencoded({ extended: false }))
   app.use(bodyParser.json())
   app.use(apiRoot, routes)

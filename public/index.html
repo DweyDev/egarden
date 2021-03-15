@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link href="/styles.css" rel="stylesheet" type="text/css"/>
+  </head>
+  <body>
+    <h1 class="title">Home</h1>
+    <a class="title" href="orders.html">Switch</a>
+    <div id="homepage">
+      <div id="recomended">
+        <h1>Get flowers recomandations</h1>
+        <div id="flowers"></div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://unpkg.com/react@15/dist/react.js"></script>
+    <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+
+
+    <!-- React Component -->
+    <script type="text/babel">
+      var Flowers = React.createClass({
+        getInitialState: function(){
+          return({
+            flowers: []
+          })
+        },
+        render:function(){
+          let flowers = this.state.flowers
+          flowers = flowers.map(function(flower, index){
+            return(
+              <li key={index}>
+                <span className={flower.available}/>
+                <span className="name">{flower.name}</span>
+                <span className="colour">{flower.colour}</span>
+                <span className="price">{flower.price}</span>
+                <span className="country">{flower.country}</span>
+              </li>
+            )
+          });
+          return(
+            <div id="flower-container">
+              <form id="search" onSubmit={this.handleSubmit}>
+                <label>Enter colour:</label>
+                <input type="text" ref="col" placeholder="colour" required/>
+                <label>Enter maximum price:</label>
+                <input type="number" ref="max" placeholder="maximum" required/>
+                <input type="submit" value="Get recomandations"/>
+              </form>
+              <ul>{flowers}</ul>
+            </div>
+          )
+        },
+        handleSubmit:function(e){
+          e.preventDefault()
+          let colour = this.refs.col.value
+          let price = this.refs.max.value
+
+          fetch('/flowers/recomended?colour=' + colour + '&price=' + price).then(function(data){
+            return data.json()
+          }).then(json => {
+            this.setState({
+              flowers: json.flowers
+            })
+          })
+        }
+      })
+
+      ReactDOM.render(<Flowers/>, document.getElementById('flowers'))
+    </script>
+
+  </body>
+</html>

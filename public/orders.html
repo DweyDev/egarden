@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link href="/styles.css" rel="stylesheet" type="text/css"/>
+  </head>
+  <body>
+    <h1 class="title">Home</h1>
+    <a class="title" href="index.html">Switch</a>
+    <div id="homepage">
+      <div id="history">
+        <h1>See order history</h1>
+        <div id="orders"></div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://unpkg.com/react@15/dist/react.js"></script>
+    <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+
+        <!-- React Component -->
+        <script type="text/babel">
+          var Orders = React.createClass({
+            getInitialState: function(){
+              return({
+                orders: []
+              })
+            },
+            render:function(){
+              let orders = this.state.orders
+              orders = orders.map(function(order, index){
+                return(
+                  <li key={index}>
+                    <span className={order.available}/>
+                    <span className="products">{order.products}</span>
+                    <span className="quantities">{order.quantities}</span>
+                  </li>
+                )
+              });
+              return(
+                <div id="order-container">
+                  <form id="see" onSubmit={this.handleSee}>
+                    <input type="submit" value="See orders"/>
+                  </form>
+                  <ul>{orders}</ul>
+                </div>
+              )
+            },
+            handleSee:function(e){
+              e.preventDefault()
+    
+              fetch('/orders').then(function(data){
+                return data.json()
+              }).then(json => {
+                this.setState({
+                  orders: json.orders
+                })
+              })
+            }
+          })
+    
+          ReactDOM.render(<Orders/>, document.getElementById('orders'))
+    </script>
+
+  </body>
+</html>
